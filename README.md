@@ -13,11 +13,11 @@ Answers each of the following questions with a single PSQL query:
 
 ## Setup and Usage
 
-Run the following command to setup the database
+Run the following command to setup the database.
 
 `psql -d news -f newsdata.sql`
 
-Create the required views then simply call
+Create the required views then call.
 
 `python log-analysis.py`
 
@@ -26,15 +26,15 @@ Create the required views then simply call
 These two views should be created before running the script.
 
 ```sql
-create view err as
-select to_char(log.time, 'FMMonth FMDD, YYYY') as day, count(*) as errors
-from log where log.status != '200 OK'
-group by day;
+CREATE OR REPLACE VIEW err AS
+SELECT to_char(log.time, 'FMMonth FMDD, YYYY') AS day, count(*) AS errors
+FROM log WHERE log.status != '200 OK'
+GROUP BY day;
 ```
 
 ```sql
-create view req as 
-select to_char(log.time, 'FMMonth FMDD, YYYY') as day, count(*) as requests
-from log 
-group by day;
+CREATE OR REPLACE VIEW req AS 
+SELECT to_char(log.time, 'FMMonth FMDD, YYYY') AS day, count(*) AS requests
+FROM log 
+GROUP BY day;
 ```
