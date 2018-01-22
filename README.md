@@ -13,17 +13,17 @@ Answers each of the following questions with a single PSQL query:
 
 ## Setup and Usage
 
-Run the following command to setup the database.
+Run the following command to setup the database:
 
 `psql -d news -f newsdata.sql`
 
-Create the required views then call.
+Create the required views and then call:
 
 `python log-analysis.py`
 
 ## Required Views
 
-These two views should be created before running the script.
+These two views should be created before running the script:
 
 ```sql
 CREATE OR REPLACE VIEW err AS
