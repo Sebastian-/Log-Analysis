@@ -21,19 +21,24 @@ def connect(database_name):
         db = psycopg2.connect("dbname={}".format(database_name))
         cursor = db.cursor()
         return db, cursor
-    except:
+    except psycopg2.Error as e:
         print "Unable to connect to database {}".format(database_name)
         sys.exit(1)
 
 
-def execute_query(query, database_name):
+def execute_query(query, database_name, fetchresult=True):
     """Returns the result of executing the query on the given database"""
     db, cursor = connect(database_name)
     cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-    db.close()
-    return result
+    if fetchresult:
+        result = cursor.fetchall()
+        cursor.close()
+        db.close()
+        return result
+    else:
+        cursor.close()
+        db.close()
+        return
 
 
 def top_three_articles():
@@ -65,6 +70,16 @@ def top_authors():
 
 def error_days():
     """Prints all days when more than %1 of site requests failed"""
+    execute_query("CREATE OR REPLACE VIEW err AS \
+        SELECT to_char(log.time, 'FMMonth FMDD, YYYY') AS day, \
+        count(*) AS errors \
+        FROM log WHERE log.status != '200 OK' \
+        GROUP BY day;", "news", False)
+    execute_query("CREATE OR REPLACE VIEW req AS \
+        SELECT to_char(log.time, 'FMMonth FMDD, YYYY') AS day, \
+        count(*) AS requests \
+        FROM log  \
+        GROUP BY day;", "news", False)
     table = execute_query(
         "select err.day, cast(err.errors as float) / req.requests * 100 \
         from err, req \

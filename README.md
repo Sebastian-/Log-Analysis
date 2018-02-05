@@ -20,21 +20,3 @@ Run the following command to setup the database:
 Create the required views and then call:
 
 `python log-analysis.py`
-
-## Required Views
-
-These two views should be created before running the script:
-
-```sql
-CREATE OR REPLACE VIEW err AS
-SELECT to_char(log.time, 'FMMonth FMDD, YYYY') AS day, count(*) AS errors
-FROM log WHERE log.status != '200 OK'
-GROUP BY day;
-```
-
-```sql
-CREATE OR REPLACE VIEW req AS 
-SELECT to_char(log.time, 'FMMonth FMDD, YYYY') AS day, count(*) AS requests
-FROM log 
-GROUP BY day;
-```
