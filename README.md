@@ -17,6 +17,6 @@ Run the following command to setup the database:
 
 `psql -d news -f newsdata.sql`
 
-Run:
+Then:
 
 `python log-analysis.py`
