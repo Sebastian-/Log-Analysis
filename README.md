@@ -20,3 +20,7 @@ Run the following command to setup the database:
 Then:
 
 `python log-analysis.py`
+
+## Relevant Technology
+
+* Python, PSQL, Linux
